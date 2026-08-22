@@ -1,0 +1,220 @@
+.hero {
+  padding: 70px 0 90px;
+  position: relative;
+  z-index: 2;
+}
+
+@media (max-width: 600px) {
+  .hero {
+    padding: 28px 0 40px;
+  }
+}
+
+.layout {
+  display: grid;
+  grid-template-columns: 0.9fr 1.1fr;
+  gap: 60px;
+  align-items: center;
+  text-align: left;
+  grid-template-areas: "headline visual" "copy visual";
+}
+
+.layout > * {
+  opacity: 0;
+  transform: translateY(18px);
+  animation: hero-in 0.7s ease forwards;
+}
+
+@keyframes hero-in {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .layout > * {
+    animation: none;
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@media (max-width: 900px) {
+  .layout {
+    grid-template-columns: 1fr;
+    text-align: center;
+    gap: 0;
+    grid-template-areas: "headline" "visual" "copy";
+  }
+}
+
+.headline {
+  grid-area: headline;
+  animation-delay: 0.05s;
+  font-family: var(--font-display);
+  font-weight: 400;
+  color: var(--ink);
+  font-size: var(--size-hero);
+  line-height: 1.06;
+  letter-spacing: -0.022em;
+  margin: 0 0 24px;
+}
+
+@media (max-width: 600px) {
+  .headline {
+    margin: 0 0 14px;
+  }
+}
+
+.soft {
+  color: var(--glow-cyan);
+  font-weight: 800;
+  display: block;
+}
+
+.visual {
+  grid-area: visual;
+  animation-delay: 0.15s;
+  max-width: 520px;
+  margin: 0;
+  padding: 14px;
+  overflow: hidden;
+  position: relative;
+  border-radius: 24px;
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.14),
+    rgba(255, 255, 255, 0.02) 40%,
+    rgba(255, 255, 255, 0.06)
+  );
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  backdrop-filter: blur(36px) saturate(180%);
+  -webkit-backdrop-filter: blur(36px) saturate(180%);
+  box-shadow: 0 1px 0 rgba(255, 255, 255, 0.3) inset, 0 0 0 1px rgba(255, 255, 255, 0.04) inset,
+    0 20px 60px rgba(0, 0, 0, 0.45);
+}
+
+.visual::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 50%;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.16), rgba(255, 255, 255, 0));
+  pointer-events: none;
+  z-index: 2;
+  border-radius: 24px 24px 0 0;
+}
+
+.visualInner {
+  will-change: transform;
+}
+
+.photo {
+  width: 100%;
+  height: auto;
+  display: block;
+  border-radius: 10px;
+  position: relative;
+  z-index: 1;
+}
+
+@media (max-width: 900px) {
+  .visual {
+    margin: 32px auto 0;
+  }
+}
+
+@media (max-width: 600px) {
+  .visual {
+    margin: 24px auto 0;
+    max-width: 360px;
+  }
+}
+
+.copy {
+  grid-area: copy;
+  animation-delay: 0.25s;
+}
+
+@media (max-width: 900px) {
+  .copy {
+    margin-top: 28px;
+  }
+}
+
+@media (max-width: 600px) {
+  .copy {
+    margin-top: 20px;
+  }
+}
+
+.sub {
+  max-width: 520px;
+  margin: 0 0 40px;
+  color: var(--cream);
+  font-size: 19px;
+  line-height: 1.65;
+  font-family: var(--font-body);
+}
+
+.emphasis {
+  font-style: italic;
+  color: var(--glow-cyan);
+  font-weight: 600;
+}
+
+@media (max-width: 900px) {
+  .sub {
+    margin: 0 auto 40px;
+  }
+}
+
+@media (max-width: 600px) {
+  .sub {
+    font-size: 16px;
+    line-height: 1.55;
+    margin: 0 auto 24px;
+  }
+}
+
+.ctaRow {
+  display: flex;
+  gap: 14px;
+  flex-wrap: wrap;
+}
+
+@media (max-width: 900px) {
+  .ctaRow {
+    justify-content: center;
+  }
+}
+
+@media (max-width: 600px) {
+  .ctaRow {
+    gap: 10px;
+    margin-bottom: 6px;
+  }
+}
+
+.statRow {
+  display: flex;
+  gap: 36px;
+  margin-top: 44px;
+  flex-wrap: wrap;
+}
+
+@media (max-width: 900px) {
+  .statRow {
+    justify-content: center;
+  }
+}
+
+@media (max-width: 600px) {
+  .statRow {
+    gap: 20px;
+    margin-top: 24px;
+  }
+}

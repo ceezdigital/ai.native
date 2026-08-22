@@ -1,0 +1,18 @@
+.track {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  z-index: 90;
+  background: rgba(255, 255, 255, 0.06);
+  pointer-events: none;
+}
+
+.fill {
+  height: 100%;
+  width: 0%;
+  background: linear-gradient(90deg, var(--glow-cyan), var(--gold));
+  box-shadow: 0 0 12px rgba(225, 77, 104, 0.6);
+  transition: width 0.08s linear;
+}

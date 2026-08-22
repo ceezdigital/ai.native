@@ -1,0 +1,31 @@
+.sticky.sticky {
+  position: fixed;
+  right: 24px;
+  bottom: 24px;
+  z-index: 70;
+  padding: 14px 26px;
+  font-size: 11.5px;
+  opacity: 0;
+  transform: translateY(16px) scale(0.96);
+  pointer-events: none;
+  transition: opacity 0.35s ease, transform 0.35s ease, box-shadow 0.25s ease;
+}
+
+.sticky.visible {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+  pointer-events: auto;
+}
+
+.sticky.sticky:hover {
+  transform: translateY(-2px) scale(1);
+}
+
+@media (max-width: 600px) {
+  .sticky.sticky {
+    right: 16px;
+    bottom: 16px;
+    padding: 12px 20px;
+    font-size: 10.5px;
+  }
+}

@@ -1,0 +1,32 @@
+.stat {
+  display: flex;
+  flex-direction: column;
+}
+
+.value {
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: 32px;
+  color: var(--ink);
+}
+
+.label {
+  font-family: var(--font-display);
+  font-size: 11px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+  margin-top: 4px;
+  max-width: 120px;
+}
+
+@media (max-width: 600px) {
+  .value {
+    font-size: 24px;
+  }
+
+  .label {
+    font-size: 9.5px;
+    max-width: 96px;
+  }
+}

@@ -1,0 +1,111 @@
+.grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+  align-items: stretch;
+}
+
+@media (max-width: 860px) {
+  .grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.card {
+  padding: 36px;
+  display: flex;
+  flex-direction: column;
+  text-align: left;
+  background: var(--glass-fill);
+  backdrop-filter: blur(22px) saturate(140%);
+  -webkit-backdrop-filter: blur(22px) saturate(140%);
+  border: 1px solid var(--glass-border);
+  border-radius: 24px;
+  box-shadow: 0 1px 0 rgba(255, 255, 255, 0.18) inset, 0 8px 40px rgba(0, 0, 0, 0.35);
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity 0.6s ease, transform 0.5s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+}
+
+.card.inView {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 1px 0 rgba(255, 255, 255, 0.18) inset, 0 24px 50px rgba(0, 0, 0, 0.4);
+  border-color: rgba(255, 255, 255, 0.28);
+}
+
+.featured {
+  border-color: rgba(201, 162, 75, 0.5);
+  box-shadow: 0 1px 0 rgba(255, 255, 255, 0.18) inset, 0 0 40px rgba(201, 162, 75, 0.15);
+}
+
+.featured:hover {
+  box-shadow: 0 1px 0 rgba(255, 255, 255, 0.18) inset, 0 24px 50px rgba(201, 162, 75, 0.22);
+}
+
+.title {
+  font-family: var(--font-display);
+  font-size: 26px;
+  font-weight: 900;
+  margin-bottom: 12px;
+  color: var(--glow-cyan);
+  letter-spacing: 0.3px;
+  text-transform: uppercase;
+}
+
+.lead {
+  color: var(--cream);
+  font-size: 15.5px;
+  line-height: 1.6;
+  margin-bottom: 22px;
+}
+
+.lead strong {
+  color: var(--ink);
+}
+
+.bullets {
+  list-style: none;
+  margin: 0 0 26px;
+  padding: 0;
+  flex-grow: 1;
+}
+
+.bullets li {
+  position: relative;
+  padding-left: 22px;
+  margin-bottom: 12px;
+  font-size: 14px;
+  color: var(--ink-dim);
+  line-height: 1.55;
+}
+
+.bullets li::before {
+  content: "✓";
+  position: absolute;
+  left: 0;
+  top: 0;
+  color: var(--glow-cyan);
+  font-weight: 700;
+  font-size: 13px;
+}
+
+.cardCta {
+  display: block;
+  text-align: center;
+  width: 100%;
+}
+
+.meta {
+  margin-top: 14px;
+  text-align: center;
+  font-family: var(--font-display);
+  font-size: 12px;
+  letter-spacing: 1px;
+  color: var(--ink-faint);
+  text-transform: uppercase;
+}

@@ -1,0 +1,16 @@
+.footer {
+  padding: 60px 0 40px;
+  text-align: center;
+}
+
+.mark {
+  font-family: var(--font-display);
+  font-weight: 700;
+  letter-spacing: 1px;
+  margin-bottom: 10px;
+}
+
+.footer p {
+  color: var(--ink-faint);
+  font-size: 13px;
+}
