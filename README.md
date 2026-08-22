@@ -10,6 +10,7 @@ Marketing site for **Ai-Nativ**, an AI education and content brand based in Nair
 - [Features](#features)
 - [Architecture Overview](#architecture-overview)
 - [Supported Modules](#supported-modules)
+- [SEO](#seo)
 - [Migration / Troubleshooting](#migration--troubleshooting)
 - [Contributing](#contributing)
 - [License](#license)
@@ -58,6 +59,10 @@ This repo is currently **frontend-only** by deliberate scope decision: the site 
 | Community | `#community` | [docs/sections/community.md](./docs/sections/community.md) |
 | Retainer (qualifier + Ai-Nativ Labs) | `#retainer` | [docs/sections/retainer.md](./docs/sections/retainer.md) |
 | Nav / Utility bar / Footer / chrome | — | [docs/sections/nav-and-footer.md](./docs/sections/nav-and-footer.md) |
+
+## SEO
+
+Full technical SEO (metadata, Open Graph, Twitter Card, JSON-LD Organization schema, `robots.txt` with explicit AI-crawler allowances, `sitemap.xml`, `llms.txt`) is implemented against a dedicated SEO brief — see [docs/seo.md](./docs/seo.md) for exactly what's in place and what's explicitly flagged as needing manual, non-code steps (Search Console/Bing verification, Google Business Profile).
 
 ## Migration / Troubleshooting
 

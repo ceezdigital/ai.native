@@ -20,7 +20,7 @@ export function Nav() {
     <div className={`${styles.nav} ${isCondensed ? styles.scrolled : ""}`}>
       <div className={styles.navbar}>
         <div className={styles.brand}>
-          <img className={styles.mark} src="/images/logo-mark.png" alt="Ai-Nativ" />
+          <img className={styles.mark} src="/images/logo-mark.png" alt="Ai-Nativ logo" />
         </div>
 
         <nav className={styles.navlinks}>

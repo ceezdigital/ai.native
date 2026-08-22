@@ -30,7 +30,7 @@ export function Retainer() {
       </div>
 
       <div className={styles.dfy}>
-        <h2 className={styles.dfyHeading}>{DFY_HEADING}</h2>
+        <h3 className={styles.dfyHeading}>{DFY_HEADING}</h3>
         <p>
           {DFY_PARAGRAPH_ONE_LEAD}
           <strong className={styles.dfyStrong}>{DFY_PARAGRAPH_ONE_STRONG}</strong>

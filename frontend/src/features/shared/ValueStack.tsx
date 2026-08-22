@@ -28,7 +28,7 @@ export function ValueStack({ items }: ValueStackProps) {
             {item.isClosing ? "✓" : String(index + 1).padStart(2, "0")}
           </span>
           <div>
-            <h4 className={styles.title}>{item.title}</h4>
+            <h3 className={styles.title}>{item.title}</h3>
             <p className={styles.body}>{item.body}</p>
           </div>
         </div>

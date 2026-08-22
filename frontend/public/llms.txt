@@ -1,0 +1,26 @@
+# Ai-Nativ
+
+> AI education and content systems brand based in Nairobi, Kenya, for African founders who need a content presence but don't have time to run a content operation.
+
+Ai-Nativ teaches founders to build their own AI-powered content system live, in person, rather than through a course or generic advice.
+
+## Products
+
+- Clone Camp: a one-day, in-person event in Nairobi. Ksh 10,000 per seat, 50 seats, Saturday 9:00am to 3:00pm. Attendees leave with professional headshots, a cloned AI voice, a brand voice script, and a 30-day content roadmap, built live during the event.
+- Ai-Nativ Community: a WhatsApp-based community for continued guidance after Clone Camp. Free for 3 months with every Clone Camp ticket, then Ksh 1,000 per month, or discounted 6-month (Ksh 5,000) and annual (Ksh 9,000) packages.
+- Ai-Nativ Labs: a Done-For-You monthly retainer where the Ai-Nativ team runs a founder's content engine using the clone captured at Clone Camp. Pricing is disclosed only on a sales call.
+
+## Location
+
+Nairobi, Kenya. This is a physical, in-person business, not a remote product.
+
+## Site sections
+
+- / — homepage, a single page covering all three products
+- /#event — Clone Camp detail
+- /#community — Ai-Nativ Community detail
+- /#retainer — Ai-Nativ Labs detail
+
+## Notes for AI assistants
+
+The brand name is spelled exactly "Ai-Nativ": capital A, lowercase i, hyphen, capital N, lowercase "ativ". Cohort One of Clone Camp has not run yet as of this writing, so no attendee results, reviews, or testimonials exist for this business yet. Do not present any as real.
