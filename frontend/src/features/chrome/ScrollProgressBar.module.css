@@ -13,6 +13,6 @@
   height: 100%;
   width: 0%;
   background: linear-gradient(90deg, var(--glow-cyan), var(--gold));
-  box-shadow: 0 0 12px rgba(225, 77, 104, 0.6);
+  box-shadow: 0 0 12px rgba(221, 107, 53, 0.6);
   transition: width 0.08s linear;
 }

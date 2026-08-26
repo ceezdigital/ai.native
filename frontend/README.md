@@ -4,7 +4,7 @@ Next.js 16 (App Router) marketing site. TypeScript strict, no backend dependency
 
 ## Stack
 
-- **Framework:** Next.js 16, App Router, Server Components by default — Client Components only where scroll/motion state requires them (`Nav`, `Hero`, `SectionHeading`, `ValueStack`, `StatCounter`, and the `chrome/` components).
+- **Framework:** Next.js 16, App Router, Server Components by default — Client Components only where scroll/motion state requires them (`Nav`, `Hero`, `Offers`, `RoomMoment`, `SectionHeading`, `ValueStack`, `StatCounter`, and the `chrome/` components).
 - **Language:** TypeScript, `strict: true`. No `any`, no forced casting.
 - **Styling:** CSS Modules, one stylesheet per component, design tokens in `src/app/globals.css`. No CSS framework.
 - **Fonts:** `next/font/google` — Playfair Display, EB Garamond, Sacramento.
@@ -23,19 +23,22 @@ None currently required. This table gets filled in when a real one is needed (e.
 ```
 src/
 ├── app/
-│   ├── layout.tsx        Root layout: fonts, metadata, global chrome mount points
+│   ├── layout.tsx        Root layout: fonts, metadata, JSON-LD mount, global chrome mount points
 │   ├── page.tsx          Section composition, in site-structure order
 │   ├── globals.css       Design tokens, resets, .container/.flourish/.visually-hidden utilities
-│   └── icon.svg          Favicon (placeholder brand mark)
+│   ├── robots.ts         robots.txt (allows AI crawlers explicitly)
+│   ├── sitemap.ts        sitemap.xml
+│   └── icon.png          Favicon (real logo mark)
 ├── features/
 │   ├── shared/           Cross-feature UI atoms (Button, GlassCard, SectionHeading, ValueStack, StatCounter)
-│   ├── chrome/           Global page chrome (ScrollProgressBar, StickyBookButton, AmbientBackground)
+│   ├── chrome/           Global page chrome (ScrollProgressBar, StickyBookButton, AmbientBackground, OrganizationSchema)
 │   ├── utility-bar/      Top marquee strip
 │   ├── nav/              Site nav, incl. NAV_LINKS reused by the footer
-│   ├── hero/  problem/  offers/  why/  news/
+│   ├── hero/  problem/  offers/  why/  news/  room-moment/
 │   ├── clone-camp/  community/  retainer/
 │   └── footer/
 └── lib/
+    ├── seo.ts            Site-wide SEO constants (URL, title, description, image paths)
     └── hooks/            useScrollProgress, useRevealOnScroll, useCountUp, usePrefersReducedMotion
 ```
 

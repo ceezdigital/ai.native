@@ -1,0 +1,109 @@
+.section {
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
+
+.ribbon {
+  position: relative;
+  height: 100px;
+  margin-bottom: 60px;
+  overflow: hidden;
+}
+
+.ribbonStrip {
+  position: absolute;
+  left: -40px;
+  right: -40px;
+  height: 38px;
+  transform: rotate(-1.6deg);
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+}
+
+.ribbonAccent {
+  top: 18px;
+  background: var(--glow-cyan);
+}
+
+.ribbonDark {
+  top: 54px;
+  background: #161311;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.ribbonTrack {
+  display: flex;
+  width: max-content;
+  animation: ribbon-scroll 26s linear infinite;
+}
+
+.ribbonAccent .ribbonItem {
+  color: #0a0500;
+}
+
+.ribbonDark .ribbonItem {
+  color: var(--gold);
+}
+
+.ribbonItem {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 13px;
+  letter-spacing: 3px;
+  white-space: nowrap;
+  padding-right: 40px;
+}
+
+@keyframes ribbon-scroll {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ribbonTrack {
+    animation: none;
+  }
+}
+
+@media (max-width: 600px) {
+  .ribbon {
+    height: 76px;
+    margin-bottom: 40px;
+  }
+
+  .ribbonStrip {
+    height: 30px;
+  }
+
+  .ribbonAccent {
+    top: 10px;
+  }
+
+  .ribbonDark {
+    top: 40px;
+  }
+
+  .ribbonItem {
+    font-size: 10.5px;
+    letter-spacing: 2px;
+  }
+}
+
+.stats {
+  display: flex;
+  gap: 80px;
+  flex-wrap: wrap;
+  margin-bottom: 10px;
+}
+
+@media (max-width: 600px) {
+  .stats {
+    gap: 32px;
+  }
+}

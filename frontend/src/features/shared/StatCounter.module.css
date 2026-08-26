@@ -10,6 +10,12 @@
   color: var(--ink);
 }
 
+.large {
+  font-weight: 800;
+  font-size: 44px;
+  letter-spacing: -0.02em;
+}
+
 .label {
   font-family: var(--font-display);
   font-size: 11px;
@@ -23,6 +29,10 @@
 @media (max-width: 600px) {
   .value {
     font-size: 24px;
+  }
+
+  .large {
+    font-size: 34px;
   }
 
   .label {

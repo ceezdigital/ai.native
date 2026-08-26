@@ -14,6 +14,7 @@ export const RETAINER_TURN_LEAD = "Still here? Good.";
 export const RETAINER_TURN_REST =
   " Because here's who this actually is for: you run a real, revenue-generating business. Your content has stalled or never started. You're too busy running the business to also run the system. You want it handled, not taught.";
 
+export const DFY_KICKER = "Ai-Nativ Labs · Done-For-You";
 export const DFY_HEADING = "Done-For-You, run by Ai-Nativ Labs";
 export const DFY_PARAGRAPH_ONE_LEAD = "The event is where Nativ proves the system works. ";
 export const DFY_PARAGRAPH_ONE_STRONG =

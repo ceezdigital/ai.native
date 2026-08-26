@@ -1,5 +1,6 @@
 "use client";
 
+import type { ReactNode } from "react";
 import { useRevealOnScroll } from "@/lib/hooks";
 import styles from "./ValueStack.module.css";
 
@@ -7,6 +8,7 @@ export type ValueStackItem = {
   title: string;
   body: string;
   isClosing?: boolean;
+  icon?: ReactNode;
 };
 
 type ValueStackProps = {
@@ -24,9 +26,13 @@ export function ValueStack({ items }: ValueStackProps) {
           className={`${styles.row} ${isVisible ? styles.inView : ""}`}
           style={{ transitionDelay: `${index * 70}ms` }}
         >
-          <span className={styles.number}>
-            {item.isClosing ? "✓" : String(index + 1).padStart(2, "0")}
-          </span>
+          {item.icon ? (
+            <span className={styles.iconBadge}>{item.icon}</span>
+          ) : (
+            <span className={styles.number}>
+              {item.isClosing ? "✓" : String(index + 1).padStart(2, "0")}
+            </span>
+          )}
           <div>
             <h3 className={styles.title}>{item.title}</h3>
             <p className={styles.body}>{item.body}</p>

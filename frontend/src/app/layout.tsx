@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Playfair_Display, Sacramento, EB_Garamond } from "next/font/google";
+import { Space_Grotesk, Inter } from "next/font/google";
 import {
   AmbientBackground,
   OrganizationSchema,
@@ -9,24 +9,17 @@ import {
 import { OG_IMAGE_PATH, SITE_DESCRIPTION, SITE_NAME, SITE_TITLE, SITE_URL } from "@/lib/seo";
 import "./globals.css";
 
-const playfairDisplay = Playfair_Display({
-  subsets: ["latin"],
-  weight: ["400", "500", "600", "700", "800", "900"],
-  variable: "--font-playfair",
-  display: "swap",
-});
-
-const sacramento = Sacramento({
-  subsets: ["latin"],
-  weight: "400",
-  variable: "--font-sacramento",
-  display: "swap",
-});
-
-const ebGaramond = EB_Garamond({
+const spaceGrotesk = Space_Grotesk({
   subsets: ["latin"],
   weight: ["400", "500", "600", "700"],
-  variable: "--font-garamond",
+  variable: "--font-space-grotesk",
+  display: "swap",
+});
+
+const inter = Inter({
+  subsets: ["latin"],
+  weight: ["400", "500", "600"],
+  variable: "--font-inter",
   display: "swap",
 });
 
@@ -67,10 +60,7 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
-    <html
-      lang="en"
-      className={`${playfairDisplay.variable} ${sacramento.variable} ${ebGaramond.variable}`}
-    >
+    <html lang="en" className={`${spaceGrotesk.variable} ${inter.variable}`}>
       <head>
         <OrganizationSchema />
       </head>

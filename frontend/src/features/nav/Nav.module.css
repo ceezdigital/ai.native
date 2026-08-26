@@ -136,11 +136,6 @@
   }
 
   .navRight {
-    order: 1;
-  }
-
-  .brand {
-    order: 2;
     margin-left: auto;
   }
 }

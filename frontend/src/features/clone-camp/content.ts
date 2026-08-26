@@ -53,6 +53,10 @@ export const CLONE_CAMP_PRICE = {
   ctaLabel: "Reserve your seat",
 };
 
+export const CLONE_CAMP_POINTER = "the whole offer, one seat";
+
+export const CLONE_CAMP_SEAT_TAG = "50 seats · Cohort One";
+
 export const CLONE_CAMP_META = [
   { label: "Format", value: "In-person, Nairobi" },
   { label: "Capacity", value: "50 seats" },

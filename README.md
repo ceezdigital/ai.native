@@ -55,6 +55,7 @@ This repo is currently **frontend-only** by deliberate scope decision: the site 
 | Offers | `#offers` | [docs/sections/offers.md](./docs/sections/offers.md) |
 | Why | `#why` | [docs/sections/why.md](./docs/sections/why.md) |
 | News (Daily Brief) | `#news` | [docs/sections/news.md](./docs/sections/news.md) |
+| Room Moment (photo break) | `#room` | [docs/sections/room-moment.md](./docs/sections/room-moment.md) |
 | Clone Camp | `#event` | [docs/sections/clone-camp.md](./docs/sections/clone-camp.md) |
 | Community | `#community` | [docs/sections/community.md](./docs/sections/community.md) |
 | Retainer (qualifier + Ai-Nativ Labs) | `#retainer` | [docs/sections/retainer.md](./docs/sections/retainer.md) |

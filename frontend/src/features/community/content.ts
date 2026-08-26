@@ -29,11 +29,24 @@ export type PricingTier = {
   price: string;
   note: string;
   featured?: boolean;
+  muted?: boolean;
+  tag?: string;
 };
 
 export const COMMUNITY_TIERS: PricingTier[] = [
-  { name: "Event Ticket", price: "10,000", note: "Includes 3 months free" },
-  { name: "Monthly", price: "1,000", note: "Full ongoing programming", featured: true },
+  {
+    name: "Event Ticket",
+    price: "10,000",
+    note: "Included with your Clone Camp ticket",
+    muted: true,
+  },
+  {
+    name: "Monthly",
+    price: "1,000",
+    note: "Full ongoing programming",
+    featured: true,
+    tag: "Most flexible",
+  },
   { name: "6 Months", price: "5,000", note: "Save 1,000" },
   { name: "Annual", price: "9,000", note: "Save 3,000" },
 ];

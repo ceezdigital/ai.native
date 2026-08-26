@@ -57,7 +57,7 @@
 
 .row {
   display: grid;
-  grid-template-columns: 110px 1fr auto;
+  grid-template-columns: 130px 1fr auto;
   gap: 20px;
   align-items: center;
   padding: 20px 30px;
@@ -74,11 +74,18 @@
 }
 
 .category {
+  display: flex;
+  align-items: center;
+  gap: 6px;
   font-family: var(--font-display);
   font-size: 11px;
   letter-spacing: 1px;
-  color: var(--glow-violet);
+  color: var(--gold);
   text-transform: uppercase;
+}
+
+.category svg {
+  flex-shrink: 0;
 }
 
 .title {

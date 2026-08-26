@@ -12,3 +12,6 @@ export const PROBLEM_WHY_REST =
 
 export const PROBLEM_CLOSE =
   "You don't need another course. You need one afternoon where it gets built, and you walk out holding it.";
+
+export const PROBLEM_IMAGE_ALT =
+  "A founder sitting alone at a cluttered desk late at night, head in hand, exhausted while recording a video on a phone propped up next to an open laptop full of editing tabs";

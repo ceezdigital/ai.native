@@ -1,3 +1,28 @@
+.section {
+  overflow: hidden;
+}
+
+.watermark {
+  position: absolute;
+  top: -40px;
+  right: 0;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: clamp(220px, 26vw, 380px);
+  line-height: 1;
+  color: var(--glow-cyan);
+  opacity: 0.05;
+  pointer-events: none;
+  user-select: none;
+}
+
+@media (max-width: 600px) {
+  .watermark {
+    font-size: 160px;
+    top: -20px;
+  }
+}
+
 .grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -12,6 +37,25 @@
 
 .card {
   padding: 32px;
+  transition: border-color 0.25s ease, transform 0.25s ease;
+}
+
+.card:hover {
+  border-color: rgba(221, 107, 53, 0.4);
+  transform: translateY(-4px);
+}
+
+.icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
+  margin-bottom: 20px;
+  color: var(--glow-cyan);
+  background: rgba(221, 107, 53, 0.12);
+  border: 1px solid rgba(221, 107, 53, 0.3);
 }
 
 .title {

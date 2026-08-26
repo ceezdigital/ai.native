@@ -9,10 +9,13 @@ export function StickyBookButton() {
 
   useEffect(() => {
     const hero = document.getElementById("hero");
+    const footer = document.querySelector("footer");
     if (!hero) return;
 
     const toggleSticky = () => {
-      setIsVisible(hero.getBoundingClientRect().bottom < 0);
+      const pastHero = hero.getBoundingClientRect().bottom < 0;
+      const reachedFooter = footer ? footer.getBoundingClientRect().top < window.innerHeight : false;
+      setIsVisible(pastHero && !reachedFooter);
     };
 
     toggleSticky();

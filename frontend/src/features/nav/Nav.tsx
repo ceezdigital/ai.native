@@ -32,6 +32,9 @@ export function Nav() {
         </nav>
 
         <div className={styles.navRight}>
+          <Button href="#event" variant="primary" className={styles.navCta}>
+            Book a seat
+          </Button>
           <button
             type="button"
             className={styles.navToggle}
@@ -41,9 +44,6 @@ export function Nav() {
           >
             &#9776;
           </button>
-          <Button href="#event" variant="primary" className={styles.navCta}>
-            Book a seat
-          </Button>
         </div>
       </div>
 

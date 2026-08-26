@@ -3,6 +3,7 @@
 }
 
 .layout {
+  position: relative;
   display: grid;
   grid-template-columns: 1.15fr 0.85fr;
   gap: 24px;
@@ -13,6 +14,32 @@
   .layout {
     grid-template-columns: 1fr;
   }
+
+  .pointer {
+    display: none;
+  }
+}
+
+.pointer {
+  position: absolute;
+  top: -34px;
+  right: 30%;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 4px;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.pointerLabel {
+  font-family: var(--font-display);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.4px;
+  color: var(--glow-cyan);
+  white-space: nowrap;
+  transform: rotate(-3deg);
 }
 
 .priceCard {
@@ -56,6 +83,28 @@
   font-size: 14px;
   margin: 18px 0 26px;
   line-height: 1.6;
+}
+
+.seatTag {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  font-family: var(--font-display);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: var(--glow-cyan);
+  margin-bottom: 14px;
+}
+
+.seatDot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--glow-cyan);
+  box-shadow: 0 0 8px var(--glow-cyan);
 }
 
 .priceCta {
