@@ -1,7 +1,8 @@
 import type { CommunityTier } from "@prisma/client";
 import { env } from "@/lib/env";
 import { getOrCreateMembership } from "@/features/community";
-import { startCommunityCheckout } from "@/features/payments";
+import { confirmMembership } from "@/features/community/repository";
+import { runInlineOrEnqueue } from "@/features/jobs";
 
 const VALID_TIERS: CommunityTier[] = ["monthly", "six_month", "annual"];
 
@@ -25,9 +26,18 @@ export async function POST(request: Request) {
   }
 
   try {
-    const membership = await getOrCreateMembership({ name, email, phone }, idempotencyKey, tier);
-    const redirectUrl = await startCommunityCheckout(membership.id);
-    return Response.redirect(redirectUrl, 302);
+    const pendingMembership = await getOrCreateMembership({ name, email, phone }, idempotencyKey, tier);
+    
+    // TEMPORARY: Bypass payments for presentation
+    const membership = await confirmMembership(pendingMembership.id, tier);
+
+    await runInlineOrEnqueue("gmail_send", {
+      to: membership.memberEmail,
+      subject: "Welcome to the Ai-Nativ Community!",
+      bodyText: `Hi ${membership.memberName}, your payment was successful. Join our WhatsApp community here: ${env.communityWhatsappInviteUrl}`,
+    });
+
+    return Response.redirect(`${env.appUrl}/?status=success#community`, 302);
   } catch (error) {
     console.error("Membership creation/checkout failed:", error);
     return Response.redirect(`${env.appUrl}/?error=checkout_failed#community`, 302);
