@@ -7,6 +7,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
+    "postinstall": "prisma generate",
     "db:generate": "prisma generate",
     "db:migrate": "prisma migrate dev",
     "db:migrate:deploy": "prisma migrate deploy",
@@ -19,7 +20,7 @@
   "dependencies": {
     "@prisma/client": "^6.19.3",
     "googleapis": "^176.0.0",
-    "next": "16.3.2",
+    "next": "16.3.7",
     "react": "19.2.8",
     "react-dom": "19.2.8"
   },
