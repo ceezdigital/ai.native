@@ -1,6 +1,7 @@
-import { Button, GlassCard, SectionHeading, ValueStack } from "@/features/shared";
+import { GlassCard, SectionHeading, ValueStack } from "@/features/shared";
 import type { ValueStackItem } from "@/features/shared";
 import { COMMUNITY_HEADING, COMMUNITY_ITEMS, COMMUNITY_LEDE, COMMUNITY_TIERS } from "./content";
+import { CommunityTierForm } from "./CommunityTierForm";
 import styles from "./Community.module.css";
 
 const COMMUNITY_ICONS = [
@@ -52,9 +53,7 @@ export function Community() {
               <span className={styles.tierCurrency}> Ksh</span>
             </div>
             <span className={styles.tierSave}>{tier.note}</span>
-            <Button href="https://tally.so/r/Ek7BN4" variant="primary" className={styles.tierCta}>
-              Select Plan
-            </Button>
+            {tier.tier && <CommunityTierForm tier={tier.tier} ctaLabel="Select Plan" className={styles.tierCta} />}
           </GlassCard>
         ))}
       </div>

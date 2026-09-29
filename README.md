@@ -40,7 +40,7 @@ npm run start
 
 The backend lives inside the same Next.js app as the frontend — API routes, not a separate service — deliberately, because the frontend is already hosted on Vercel and a separate service would need its own always-on host just to run background workers. See [`SYSTEM_DESIGN.md`](./SYSTEM_DESIGN.md) for the full architecture (system map, critical-path sequence, data model, integrations) and the reasoning behind that call.
 
-Phase 1 (live now): Clone Camp booking — Tally intake, Pesapal payment, Postgres as the source of truth, Google Workspace sync (Sheets/Gmail/Calendar). Community subscriptions and Ai-Nativ Labs lead capture follow the same pattern in Phase 2–3.
+Live now: Clone Camp booking and Community subscriptions, both via native forms on the marketing site submitting directly to our own API — Pesapal payment, Postgres as the source of truth, Google Workspace sync (Sheets/Gmail/Calendar). Ai-Nativ Labs lead capture follows the same pattern next.
 
 ```
 /
@@ -71,7 +71,7 @@ Full technical SEO (metadata, Open Graph, Twitter Card, JSON-LD Organization sch
 ## Migration / Troubleshooting
 
 - **Real assets are in place** (`public/images/logo-mark.png`, `public/images/hero-photo.jpg`, `src/app/icon.png`), extracted and resized from the source reference file. `Nav` and `Hero` still render them via plain `<img>` rather than `next/image` — switching over is a reasonable follow-up now that both files are properly sized raster images, but wasn't required to ship.
-- **Clone Camp payment flow is built** (Tally → our API → Pesapal → confirmed booking), but the price-card CTA on the marketing page still needs pointing at the real Tally form URL once that form exists — it's currently `href="#"`. See `frontend/README.md`'s environment variable table for what needs configuring before this goes live.
+- **Clone Camp and Community payment flows are built end-to-end** — native forms on the marketing page submit directly to our API, which starts a Pesapal checkout and confirms on payment. See `frontend/README.md`'s environment variable table for what needs configuring before this goes live (notably `COMMUNITY_WHATSAPP_INVITE_URL`, still a placeholder).
 - **Ai-Nativ Labs scheduling link is a placeholder.** "Talk to Ai-Nativ Labs" has no destination yet until a scheduling tool is chosen. (Its lead-capture backend is Phase 3, not built yet either.)
 - Port 3000 busy on `npm run dev`? Next.js auto-selects the next open port and logs it — check terminal output.
 

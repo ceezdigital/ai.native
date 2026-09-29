@@ -8,13 +8,10 @@ function required(name: string): string {
 
 // Read lazily (not at module load) so a route that doesn't need a given
 // integration doesn't crash the whole app when that var isn't set yet —
-// e.g. Google Workspace creds can be added after Tally/Pesapal are live.
+// e.g. Google Workspace creds can be added after Pesapal is live.
 export const env = {
   get databaseUrl() {
     return required("DATABASE_URL");
-  },
-  get tallyWebhookSecret() {
-    return required("TALLY_WEBHOOK_SECRET");
   },
   get pesapalConsumerKey() {
     return required("PESAPAL_CONSUMER_KEY");
@@ -30,12 +27,6 @@ export const env = {
   },
   get appUrl() {
     return required("APP_URL");
-  },
-  get googleServiceAccountJson() {
-    return required("GOOGLE_SERVICE_ACCOUNT_JSON");
-  },
-  get googleImpersonateEmail() {
-    return required("GOOGLE_IMPERSONATE_EMAIL");
   },
   get googleSheetsSpreadsheetId() {
     return required("GOOGLE_SHEETS_SPREADSHEET_ID");
@@ -54,5 +45,13 @@ export const env = {
   },
   get googleOauthRefreshToken() {
     return required("GOOGLE_OAUTH_REFRESH_TOKEN");
+  },
+  get communityWhatsappInviteUrl() {
+    return required("COMMUNITY_WHATSAPP_INVITE_URL");
+  },
+  // Where internal alerts (e.g. an overbooked seat needing manual review)
+  // get sent — the owner's own address, not a Google auth concern.
+  get ownerAlertEmail() {
+    return required("OWNER_ALERT_EMAIL");
   },
 };

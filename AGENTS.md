@@ -8,7 +8,7 @@ A one-page Next.js marketing site for Ai-Nativ, an AI education brand in Nairobi
 
 ## Architecture layers
 
-The marketing site is static-content, no Controller/Service/Model split needed. The backend (Phase 1 onward, under `src/app/api/` and `src/features/{webhooks,bookings,payments,jobs,google-workspace}/`) does follow a real layering: each feature has a `repository.ts` (DB access), a `service.ts` (orchestration/business logic), and route handlers that stay thin — parse the request, call the service, return a response, nothing more. See `/SYSTEM_DESIGN.md` for the domain model this backs.
+The marketing site is static-content, no Controller/Service/Model split needed. The backend (under `src/app/api/` and `src/features/{webhooks,bookings,community,payments,jobs,google-workspace}/`) does follow a real layering: each feature has a `repository.ts` (DB access, no dependency on other features — keeps the dependency graph one-directional), a `service.ts` (orchestration/business logic), and route handlers that stay thin — parse the request, call the service, return a response, nothing more. `payments/service.ts` owns starting *and* confirming checkout for every product (booking, membership) rather than each feature owning its own Pesapal calls, specifically to avoid a circular import between `payments` and whichever feature it's confirming a payment for. See `/SYSTEM_DESIGN.md` for the domain model this backs.
 
 The frontend layers that exist:
 
@@ -30,9 +30,9 @@ The frontend layers that exist:
 
 ## Storage / config rules
 
-- The backend (Phase 1: Clone Camp booking) has a real Postgres database via Prisma — see `/SYSTEM_DESIGN.md` for the architecture and `prisma/schema.prisma` for the models. Never hand-write SQL migrations; use `npm run db:migrate` and let Prisma generate them.
+- The backend (Clone Camp booking + Community subscriptions) has a real Postgres database via Prisma — see `/SYSTEM_DESIGN.md` for the architecture and `prisma/schema.prisma` for the models. Prefer `npm run db:migrate` and let Prisma generate migrations. Neon's compute has proven unreliable for the schema-engine's own connection (advisory-lock timeouts, "no schema selected" on the pooled URL) — if `migrate dev`/`migrate resolve` genuinely won't connect after several retries, it's acceptable to hand-write the migration SQL (matching the exact live DDL, pulled via `information_schema`/`pg_constraint`, never guessed) and mark it applied with `prisma migrate resolve --applied`, but only as a documented last resort, never as a shortcut to avoid `migrate dev`.
 - Environment variables are real now — see `frontend/.env.example` for the full list and `frontend/README.md`'s table for what each one does. Add new ones the same way: document in both places, add a lazy getter in `src/lib/env.ts`, never commit an actual value.
-- Every webhook handler verifies before it trusts — Tally via HMAC signature, Pesapal via a callback to Pesapal's own status API. Don't add a webhook route that skips this.
+- Every webhook handler verifies before it trusts — Pesapal via a callback to its own status API (it doesn't sign the inbound IPN call itself). Form submissions (Clone Camp, Community) aren't webhooks at all — they POST directly to our own API from the attendee's browser, no third party in between. Don't add a webhook route that skips verification.
 - Google Workspace calls (Sheets/Gmail/Calendar) run inline right after a payment confirms, not via cron — cron (`/api/cron/retry-jobs`) only retries what already failed. Don't move the common path onto cron; see `src/features/jobs/runInlineOrEnqueue.ts` for why.
 - Images live in `public/images/` as real files, referenced by relative path. Never re-introduce base64-embedded images (a previous version of this site did this and bloated the page to 3.9MB).
 

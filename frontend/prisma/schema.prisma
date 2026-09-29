@@ -1,7 +1,6 @@
-// Ai-Nativ backend — Phase 1 (Clone Camp booking).
-// See /SYSTEM_DESIGN.md at the repo root for the full architecture.
-// CommunityMembership and LabsLead are documented there but not modeled here
-// yet — they're a Phase 2/3 slice, added when that work starts.
+// Ai-Nativ backend. See /SYSTEM_DESIGN.md at the repo root for the full
+// architecture. LabsLead is documented there but not modeled here yet —
+// it's a later slice, added when that work starts.
 
 generator client {
   provider = "prisma-client-js"
@@ -35,16 +34,16 @@ enum BookingStatus {
 }
 
 model Booking {
-  id                String        @id @default(uuid())
-  cohortId          String        @map("cohort_id")
-  cohort            Cohort        @relation(fields: [cohortId], references: [id])
-  tallySubmissionId String        @unique @map("tally_submission_id")
-  attendeeName      String        @map("attendee_name")
-  attendeeEmail     String        @map("attendee_email")
-  attendeePhone     String        @map("attendee_phone")
-  status            BookingStatus @default(pending_payment)
-  createdAt         DateTime      @default(now()) @map("created_at")
-  updatedAt         DateTime      @updatedAt @map("updated_at")
+  id             String        @id @default(uuid())
+  cohortId       String        @map("cohort_id")
+  cohort         Cohort        @relation(fields: [cohortId], references: [id])
+  idempotencyKey String        @unique @map("idempotency_key")
+  attendeeName   String        @map("attendee_name")
+  attendeeEmail  String        @map("attendee_email")
+  attendeePhone  String        @map("attendee_phone")
+  status         BookingStatus @default(pending_payment)
+  createdAt      DateTime      @default(now()) @map("created_at")
+  updatedAt      DateTime      @updatedAt @map("updated_at")
 
   payment Payment?
 
@@ -135,17 +134,17 @@ enum MembershipStatus {
 }
 
 model CommunityMembership {
-  id                String           @id @default(uuid())
-  tallySubmissionId String           @unique @map("tally_submission_id")
-  memberName        String           @map("member_name")
-  memberEmail       String           @map("member_email")
-  memberPhone       String           @map("member_phone")
-  tier              CommunityTier
-  status            MembershipStatus @default(pending_payment)
-  startedAt         DateTime?        @map("started_at")
-  renewsAt          DateTime?        @map("renews_at")
-  createdAt         DateTime         @default(now()) @map("created_at")
-  updatedAt         DateTime         @updatedAt @map("updated_at")
+  id             String           @id @default(uuid())
+  idempotencyKey String           @unique @map("idempotency_key")
+  memberName     String           @map("member_name")
+  memberEmail    String           @map("member_email")
+  memberPhone    String           @map("member_phone")
+  tier           CommunityTier
+  status         MembershipStatus @default(pending_payment)
+  startedAt      DateTime?        @map("started_at")
+  renewsAt       DateTime?        @map("renews_at")
+  createdAt      DateTime         @default(now()) @map("created_at")
+  updatedAt      DateTime         @updatedAt @map("updated_at")
 
   payment Payment?
 

@@ -1,2 +1,2 @@
-export { startCheckout, confirmPaymentFromCallback } from "./service";
+export { startCheckout, startCommunityCheckout, confirmPaymentFromCallback } from "./service";
 export { registerIpnUrl } from "./pesapalClient";

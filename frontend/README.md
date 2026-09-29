@@ -9,7 +9,7 @@ Next.js 16 (App Router). Marketing site UI and the booking/payment backend live 
 - **Styling:** CSS Modules, one stylesheet per component, design tokens in `src/app/globals.css`. No CSS framework.
 - **Fonts:** `next/font/google` — Space Grotesk (display), Inter (body).
 - **Database:** PostgreSQL (Neon) via Prisma. Schema in `prisma/schema.prisma`.
-- **Integrations:** Tally (form intake webhook), Pesapal (payment), Google Workspace (Sheets/Gmail/Calendar sync via a domain-wide-delegated service account).
+- **Integrations:** Pesapal (payment — the only inbound webhook), Google Workspace (Sheets/Gmail/Calendar sync). Booking/Community intake is a native form on the site itself, not a third-party integration — see `/SYSTEM_DESIGN.md` for why Tally was removed.
 - **Deployment target:** Vercel — one project, no separate backend host. Background/retry jobs run via Vercel Cron rather than a persistent worker (see `vercel.json`).
 
 ## Environment variables
@@ -19,22 +19,22 @@ Copy `.env.example` to `.env.local` and fill in real values — see that file's 
 | Variable | Purpose | Required |
 |---|---|---|
 | `DATABASE_URL` | Postgres connection string | Yes |
-| `TALLY_WEBHOOK_SECRET` | Verifies Tally webhook signatures | Yes |
 | `PESAPAL_CONSUMER_KEY` / `PESAPAL_CONSUMER_SECRET` | Pesapal API auth | Yes |
 | `PESAPAL_IPN_ID` | From a one-time `registerIpnUrl()` call, not the dashboard | Yes |
 | `PESAPAL_ENV` | `sandbox` (default) or `live` | No |
 | `APP_URL` | This site's own deployed URL, used to build callback URLs | Yes |
-| `GOOGLE_SERVICE_ACCOUNT_JSON` | Service account key JSON, single-line | Yes |
-| `GOOGLE_IMPERSONATE_EMAIL` | Owner's Workspace address the service account impersonates | Yes |
-| `GOOGLE_SHEETS_SPREADSHEET_ID` | Target spreadsheet for booking sync | Yes |
+| `GOOGLE_SHEETS_SPREADSHEET_ID` | Target spreadsheet for booking/membership sync | Yes |
 | `GOOGLE_CALENDAR_ID` | Defaults to `"primary"` if unset | No |
+| `GOOGLE_OAUTH_CLIENT_ID` / `GOOGLE_OAUTH_CLIENT_SECRET` / `GOOGLE_OAUTH_REFRESH_TOKEN` | Testing-phase Google auth (personal account OAuth2, not domain-wide delegation — see `/SYSTEM_DESIGN.md`'s Integrations section) | Yes |
 | `CRON_SECRET` | Vercel auto-sends this as a Bearer token to the cron route | Yes |
+| `OWNER_ALERT_EMAIL` | Where internal alerts (e.g. an overbooked seat) get sent | Yes |
+| `COMMUNITY_WHATSAPP_INVITE_URL` | Real WhatsApp group invite link — still a placeholder, needed before a confirmed Community payment's welcome email works | Yes |
 
 ## Folder structure
 
 ```
 prisma/
-├── schema.prisma        Cohort, Booking, Payment, Job, WebhookEvent
+├── schema.prisma        Cohort, Booking, CommunityMembership, Payment, Job, WebhookEvent
 └── seed.ts               Creates the active Cohort row if one doesn't exist
 
 src/
@@ -46,10 +46,10 @@ src/
 │   ├── sitemap.ts        sitemap.xml
 │   ├── icon.png          Favicon (real logo mark)
 │   └── api/
-│       ├── webhooks/tally/       Tally form-submission webhook (signed)
-│       ├── webhooks/pesapal/     Pesapal IPN — payment status callback
-│       ├── checkout/start/       Where Tally's post-submit redirect lands; starts Pesapal checkout
-│       ├── checkout/callback/    Where Pesapal sends the attendee's browser back
+│       ├── bookings/create/      Clone Camp form submits here — creates the booking and starts Pesapal checkout in one request
+│       ├── community/create/     Community form submits here — same shape, plus a tier field
+│       ├── webhooks/pesapal/     Pesapal IPN — payment status callback (the only inbound webhook)
+│       ├── checkout/callback/    Where Pesapal sends the attendee's browser back after paying
 │       └── cron/retry-jobs/      Vercel Cron target — retries failed Google Workspace syncs
 ├── features/
 │   ├── shared/            Cross-feature UI atoms (Button, GlassCard, SectionHeading, ValueStack, StatCounter)
@@ -57,13 +57,14 @@ src/
 │   ├── utility-bar/       Top marquee strip
 │   ├── nav/               Site nav, incl. NAV_LINKS reused by the footer
 │   ├── hero/  problem/  offers/  why/  news/  room-moment/
-│   ├── clone-camp/  community/  retainer/
+│   ├── clone-camp/  retainer/
 │   ├── footer/
-│   ├── webhooks/          Signature verification + the WebhookEvent audit log
-│   ├── bookings/          Seat-cap booking logic, Tally payload parsing
-│   ├── payments/          Pesapal client + payment confirmation orchestration
+│   ├── webhooks/          The WebhookEvent audit log (Pesapal IPN calls only now)
+│   ├── bookings/          Seat-cap booking logic + the Clone Camp form component
+│   ├── community/         Membership logic + the Community tier-select form component
+│   ├── payments/          Pesapal client + checkout start/confirm for every product
 │   ├── jobs/               Retry-queue table + inline-first job dispatch
-│   └── google-workspace/  Sheets, Gmail, Calendar clients (one shared service-account auth)
+│   └── google-workspace/  Sheets, Gmail, Calendar clients (one shared auth — see the Integrations section above)
 └── lib/
     ├── seo.ts             Site-wide SEO constants (URL, title, description, image paths)
     ├── db.ts              Prisma client singleton

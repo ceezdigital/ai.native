@@ -1,35 +1,28 @@
-import { PrismaClient } from '@prisma/client'
-import crypto from 'crypto'
+// Dev helper: exercises the real /api/bookings/create endpoint the way the
+// native form does, instead of writing to the DB directly — this actually
+// proves the route works, not just that a row can be inserted.
+// Run with: node --env-file=.env scripts/test-booking.mjs
+import crypto from "crypto";
 
-const prisma = new PrismaClient()
+const APP_URL = process.env.APP_URL ?? "http://localhost:3005";
 
 async function run() {
-  const cohort = await prisma.cohort.create({
-    data: {
-      label: 'Test Cohort',
-      eventDate: new Date(),
-      seatCap: 50,
-      seatsConfirmed: 0,
-      isActive: true,
-    }
-  })
+  const body = new URLSearchParams({
+    idempotencyKey: "test_" + crypto.randomBytes(4).toString("hex"),
+    name: "Test Attendee",
+    email: "test@example.com",
+    phone: "+254700000000",
+  });
 
-  const submissionId = 'tally_sub_' + crypto.randomBytes(4).toString('hex')
+  const response = await fetch(`${APP_URL}/api/bookings/create`, {
+    method: "POST",
+    headers: { "Content-Type": "application/x-www-form-urlencoded" },
+    body,
+    redirect: "manual",
+  });
 
-  const booking = await prisma.booking.create({
-    data: {
-      cohortId: cohort.id,
-      tallySubmissionId: submissionId,
-      attendeeName: 'Test Attendee',
-      attendeeEmail: 'test@example.com',
-      attendeePhone: '123456789',
-      status: 'pending_payment'
-    }
-  })
-
-  console.log('\n--- SUCCESS! ---')
-  console.log('To test the Pesapal payment and Google Workspace sync, click this link:')
-  console.log(`http://localhost:3005/api/checkout/start?submissionId=${submissionId}`)
+  console.log("Status:", response.status);
+  console.log("Redirected to:", response.headers.get("location"));
 }
 
-run().catch(console.error).finally(() => prisma.$disconnect())
+run().catch(console.error);

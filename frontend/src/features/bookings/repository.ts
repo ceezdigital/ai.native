@@ -7,19 +7,19 @@ export async function getActiveCohort() {
   return cohort;
 }
 
-export function findBookingBySubmissionId(tallySubmissionId: string) {
-  return db.booking.findUnique({ where: { tallySubmissionId } });
+export function findBookingByIdempotencyKey(idempotencyKey: string) {
+  return db.booking.findUnique({ where: { idempotencyKey } });
 }
 
 export function findBookingById(id: string) {
   return db.booking.findUnique({ where: { id }, include: { payment: true } });
 }
 
-export async function createPendingBooking(cohortId: string, tallySubmissionId: string, attendee: AttendeeInfo) {
+export async function createPendingBooking(cohortId: string, idempotencyKey: string, attendee: AttendeeInfo) {
   return db.booking.create({
     data: {
       cohortId,
-      tallySubmissionId,
+      idempotencyKey,
       attendeeName: attendee.name,
       attendeeEmail: attendee.email,
       attendeePhone: attendee.phone,

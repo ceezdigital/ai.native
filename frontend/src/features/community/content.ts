@@ -24,29 +24,40 @@ export const COMMUNITY_ITEMS: ValueStackItem[] = [
   },
 ];
 
+// Matches the Prisma CommunityTier enum's string values — kept as a plain
+// union here (not imported from @prisma/client) so this presentation file
+// doesn't depend on generated backend types.
+export type PurchasableTier = "monthly" | "six_month" | "annual";
+
 export type PricingTier = {
   name: string;
   price: string;
+  amount: number;
   note: string;
   featured?: boolean;
   muted?: boolean;
   tag?: string;
+  tier: PurchasableTier | null;
 };
 
 export const COMMUNITY_TIERS: PricingTier[] = [
   {
     name: "Event Ticket",
     price: "10,000",
+    amount: 10_000,
     note: "Included with your Clone Camp ticket",
     muted: true,
+    tier: null,
   },
   {
     name: "Monthly",
     price: "1,000",
+    amount: 1_000,
     note: "Full ongoing programming",
     featured: true,
     tag: "Most flexible",
+    tier: "monthly",
   },
-  { name: "6 Months", price: "5,000", note: "Save 1,000" },
-  { name: "Annual", price: "9,000", note: "Save 3,000" },
+  { name: "6 Months", price: "5,000", amount: 5_000, note: "Save 1,000", tier: "six_month" },
+  { name: "Annual", price: "9,000", amount: 9_000, note: "Save 3,000", tier: "annual" },
 ];

@@ -1,4 +1,5 @@
-import { Button, SectionHeading, ValueStack } from "@/features/shared";
+import { SectionHeading, ValueStack } from "@/features/shared";
+import { BookingForm } from "@/features/bookings";
 import {
   CLONE_CAMP_ITEMS,
   CLONE_CAMP_LEDE_LEAD,
@@ -60,9 +61,7 @@ export function CloneCamp() {
             <span className={styles.seatDot} aria-hidden="true" />
             {CLONE_CAMP_SEAT_TAG}
           </div>
-          <Button href="https://tally.so/r/Ek7BN4" variant="primary" className={styles.priceCta}>
-            {CLONE_CAMP_PRICE.ctaLabel}
-          </Button>
+          <BookingForm ctaLabel={CLONE_CAMP_PRICE.ctaLabel} className={styles.priceCta} />
           <div className={styles.priceMeta}>
             {CLONE_CAMP_META.map((row) => (
               <div key={row.label}>
