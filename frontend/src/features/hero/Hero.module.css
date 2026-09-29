@@ -59,21 +59,6 @@
   }
 }
 
-.indexTag {
-  font-family: var(--font-display);
-  font-size: 12px;
-  letter-spacing: 2px;
-  text-transform: uppercase;
-  color: var(--glow-cyan);
-  font-weight: 600;
-  margin-bottom: 18px;
-}
-
-@media (max-width: 900px) {
-  .indexTag {
-    display: none;
-  }
-}
 
 .headline {
   font-family: var(--font-display);

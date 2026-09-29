@@ -1,4 +1,3 @@
-export const HERO_INDEX_TAG = "01 · Clone Camp";
 export const HERO_HEADLINE = "One session. Every video you'll ever need.";
 export const HERO_SUBHEAD =
   "Clone your voice and likeness once, live in Nairobi. Leave with the AI tools to generate unlimited marketing videos, no camera required, ever again.";

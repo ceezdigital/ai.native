@@ -5,7 +5,6 @@ import { Button } from "@/features/shared";
 import { usePrefersReducedMotion } from "@/lib/hooks";
 import {
   HERO_HEADLINE,
-  HERO_INDEX_TAG,
   HERO_OUTPUT_MORE_LABEL,
   HERO_PHOTO_TAG,
   HERO_PRIMARY_CTA,
@@ -44,7 +43,6 @@ export function Hero() {
     <header id="hero" className={styles.hero}>
       <div className={`${styles.layout} container`}>
         <div className={styles.copy}>
-          <div className={styles.indexTag}>{HERO_INDEX_TAG}</div>
           <h1 className={styles.headline}>{HERO_HEADLINE}</h1>
           <p className={styles.sub}>{HERO_SUBHEAD}</p>
 
