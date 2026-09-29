@@ -34,7 +34,23 @@ export async function POST(request: Request) {
     await runInlineOrEnqueue("gmail_send", {
       to: membership.memberEmail,
       subject: "Welcome to the Ai-Nativ Community!",
-      bodyText: `Hi ${membership.memberName}, your payment was successful. Join our WhatsApp community here: ${env.communityWhatsappInviteUrl}`,
+      bodyText: `Hi ${membership.memberName}, we've received your membership request. We'll send you an invoice and your WhatsApp invite link shortly.`,
+      bodyHtml: `
+        <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; background-color: #0b0c10; color: #c5c6c7; border-radius: 8px; overflow: hidden; border: 1px solid #1f2833;">
+          <div style="background-color: #1f2833; padding: 24px; text-align: center; border-bottom: 1px solid #d4af37;">
+            <h1 style="margin: 0; color: #d4af37; font-family: Georgia, serif; font-size: 28px;">Ai-Nativ</h1>
+          </div>
+          <div style="padding: 32px; line-height: 1.6;">
+            <h2 style="margin-top: 0; color: #ffffff; font-weight: normal;">Membership Request Received</h2>
+            <p>Hi ${membership.memberName},</p>
+            <p>Thank you for requesting to join the Ai-Nativ Community!</p>
+            <p>We are currently onboarding new members for this quarter. We will follow up shortly with your official invoice and your private invite link to the WhatsApp group.</p>
+            <p>Your spot in the community is reserved in the meantime.</p>
+            <br>
+            <p style="color: #d4af37;">Welcome aboard,<br><strong>The Ai-Nativ Team</strong></p>
+          </div>
+        </div>
+      `
     });
 
     return Response.redirect(`${env.appUrl}/?status=success#community`, 302);

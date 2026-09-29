@@ -47,8 +47,24 @@ export async function POST(request: Request) {
          }),
          runInlineOrEnqueue("gmail_send", {
            to: booking.attendeeEmail,
-           subject: "You're confirmed for Ai-Nativ Clone Camp",
-           bodyText: `Hi ${booking.attendeeName}, your seat for ${cohort.label} is confirmed. See you there.`,
+           subject: "Your seat is reserved! (Ai-Nativ Clone Camp)",
+           bodyText: `Hi ${booking.attendeeName}, your seat for ${cohort.label} is officially reserved. We will follow up with your official invoice and payment link as the event approaches.`,
+           bodyHtml: `
+             <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; background-color: #0b0c10; color: #c5c6c7; border-radius: 8px; overflow: hidden; border: 1px solid #1f2833;">
+               <div style="background-color: #1f2833; padding: 24px; text-align: center; border-bottom: 1px solid #45a29e;">
+                 <h1 style="margin: 0; color: #66fcf1; font-family: Georgia, serif; font-size: 28px;">Ai-Nativ</h1>
+               </div>
+               <div style="padding: 32px; line-height: 1.6;">
+                 <h2 style="margin-top: 0; color: #ffffff; font-weight: normal;">Clone Camp: Seat Reserved</h2>
+                 <p>Hi ${booking.attendeeName},</p>
+                 <p>We've officially saved your seat for <strong>${cohort.label}</strong>.</p>
+                 <p>We are currently finalizing the roster for this cohort. We will follow up directly with your official invoice and secure payment link as the event approaches.</p>
+                 <p>For now, you don't need to do anything—your spot is fully guaranteed.</p>
+                 <br>
+                 <p style="color: #66fcf1;">See you there,<br><strong>The Ai-Nativ Team</strong></p>
+               </div>
+             </div>
+           `
          }),
          runInlineOrEnqueue("calendar_update", {
            cohortId: cohort.id,

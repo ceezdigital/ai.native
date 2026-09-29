@@ -9,7 +9,11 @@ function toBase64Url(input: string): string {
 export async function sendGmail(payload: GmailSendPayload) {
   const gmail = google.gmail({ version: "v1", auth: getGoogleAuthClient() });
 
-  const message = [`To: ${payload.to}`, `Subject: ${payload.subject}`, "Content-Type: text/plain; charset=utf-8", "", payload.bodyText].join(
+  const isHtml = Boolean(payload.bodyHtml);
+  const contentType = isHtml ? "text/html; charset=utf-8" : "text/plain; charset=utf-8";
+  const body = isHtml ? payload.bodyHtml : payload.bodyText;
+
+  const message = [`To: ${payload.to}`, `Subject: ${payload.subject}`, `Content-Type: ${contentType}`, "", body].join(
     "\r\n",
   );
 

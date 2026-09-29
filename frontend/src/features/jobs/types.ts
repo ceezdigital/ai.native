@@ -12,6 +12,7 @@ export type GmailSendPayload = {
   to: string;
   subject: string;
   bodyText: string;
+  bodyHtml?: string;
 };
 
 export type CalendarUpdatePayload = {
