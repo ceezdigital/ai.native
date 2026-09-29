@@ -1,14 +1,17 @@
 import type { Job, JobType } from "@prisma/client";
 import { db } from "@/lib/db";
-import { appendBookingRow, sendGmail, upsertCohortCalendarEvent } from "@/features/google-workspace";
+import { appendBookingRow, appendMembershipRow, sendGmail, upsertCohortCalendarEvent } from "@/features/google-workspace";
 import type { CalendarUpdatePayload, GmailSendPayload, SheetsSyncPayload } from "./types";
 
 // The one place that knows how to run each job type, keyed by JobType so
 // both the inline attempt and the cron retry sweep share the same logic.
 export async function runJobPayload(type: JobType, payload: unknown): Promise<void> {
   switch (type) {
-    case "sheets_sync":
-      return appendBookingRow(payload as SheetsSyncPayload);
+    case "sheets_sync": {
+      const typed = payload as SheetsSyncPayload;
+      if (typed.kind === "booking_confirmed") return appendBookingRow(typed);
+      return appendMembershipRow(typed);
+    }
     case "gmail_send":
       return sendGmail(payload as GmailSendPayload);
     case "calendar_update": {

@@ -1,9 +1,17 @@
 import { google } from "googleapis";
+import { env } from "@/lib/env";
 import { getGoogleAuthClient } from "./googleAuth";
 import type { GmailSendPayload } from "../jobs/types";
 
 function toBase64Url(input: string): string {
   return Buffer.from(input).toString("base64").replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/, "");
+}
+
+// Without an explicit From header, Gmail falls back to the impersonated
+// account's own profile name — this is what actually controls what shows
+// up next to the sender address in the recipient's inbox.
+function fromHeader(): string {
+  return `From: "${env.googleSenderName}" <${env.googleImpersonateEmail}>`;
 }
 
 // multipart/alternative with both a plain-text and an HTML part is what
@@ -14,6 +22,7 @@ function buildMultipartMessage(payload: GmailSendPayload): string {
   const boundary = `ainativ_${Date.now()}_${Math.random().toString(36).slice(2)}`;
 
   return [
+    fromHeader(),
     `To: ${payload.to}`,
     `Subject: ${payload.subject}`,
     "MIME-Version: 1.0",
@@ -34,9 +43,14 @@ function buildMultipartMessage(payload: GmailSendPayload): string {
 }
 
 function buildPlainMessage(payload: GmailSendPayload): string {
-  return [`To: ${payload.to}`, `Subject: ${payload.subject}`, "Content-Type: text/plain; charset=UTF-8", "", payload.bodyText].join(
-    "\r\n",
-  );
+  return [
+    fromHeader(),
+    `To: ${payload.to}`,
+    `Subject: ${payload.subject}`,
+    "Content-Type: text/plain; charset=UTF-8",
+    "",
+    payload.bodyText,
+  ].join("\r\n");
 }
 
 export async function sendGmail(payload: GmailSendPayload) {

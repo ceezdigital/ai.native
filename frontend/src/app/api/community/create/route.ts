@@ -35,17 +35,26 @@ export async function POST(request: Request) {
     // payments/service.ts already does for the Pesapal path.
     const membership = await confirmMembership(pendingMembership.id, tier);
 
-    const emailContent = membershipRequestEmail({
-      memberName: membership.memberName,
-      tierLabel: COMMUNITY_TIER_LABELS[tier],
-    });
+    const tierLabel = COMMUNITY_TIER_LABELS[tier];
+    const emailContent = membershipRequestEmail({ memberName: membership.memberName, tierLabel });
 
-    await runInlineOrEnqueue("gmail_send", {
-      to: membership.memberEmail,
-      subject: emailContent.subject,
-      bodyText: emailContent.text,
-      bodyHtml: emailContent.html,
-    });
+    await Promise.all([
+      runInlineOrEnqueue("sheets_sync", {
+        kind: "membership_confirmed",
+        membershipId: membership.id,
+        memberName: membership.memberName,
+        memberEmail: membership.memberEmail,
+        memberPhone: membership.memberPhone,
+        tierLabel,
+        amount: "Pending, invoice to follow",
+      }),
+      runInlineOrEnqueue("gmail_send", {
+        to: membership.memberEmail,
+        subject: emailContent.subject,
+        bodyText: emailContent.text,
+        bodyHtml: emailContent.html,
+      }),
+    ]);
 
     return Response.redirect(`${env.appUrl}/?status=success#community`, 302);
   } catch (error) {

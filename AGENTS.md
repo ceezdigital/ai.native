@@ -45,6 +45,7 @@ There is no test suite yet (no test framework is installed). Before calling a ch
 - Misspelling the brand name. It is **Ai-Nativ** — capital A, lowercase i, hyphen, capital N, lowercase "ativ". Never AI-NATIV, AI-Nativ, or AI-Native. Check every place a rename touches: headings, alt text, `<title>`, `content.ts` files, filenames.
 - Showing a price for Ai-Nativ Labs anywhere on the page. It is a sales-call-only number by design.
 - Fabricating testimonials, attendee photos, or results for Cohort One — it has not run yet as of this writing. If you need placeholder content (e.g. the Daily Brief feed), follow the source document's own explicitly-sanctioned placeholder pattern instead of inventing engagement stats.
+- **No em dashes in any customer-facing copy** — not on the site, not in transactional emails, not in anything a founder or attendee reads. Every `content.ts` file in this repo is em-dash-free by convention; match it. (Engineering docs like this file are fine — the rule is about brand copy, not developer-facing writing.)
 - Adding an eyebrow label, a fourth font, a fourth button style, or a new CSS breakpoint without checking the design-system doc first.
 - The logo, hero photo, and favicon are real assets (extracted and resized from the source reference file), rendered via plain `<img>`. Switching them to `next/image` is a reasonable optional improvement, not a correctness fix — don't treat it as blocking.
 

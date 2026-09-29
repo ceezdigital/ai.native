@@ -34,7 +34,7 @@ export async function POST(request: Request) {
     if (overbooked) {
       await runInlineOrEnqueue("gmail_send", {
         to: env.ownerAlertEmail,
-        subject: "Ai-Nativ — overbooked seat needs manual review",
+        subject: "Ai-Nativ: overbooked seat needs manual review",
         bodyText: `Booking ${booking.id} (${booking.attendeeName}, ${booking.attendeeEmail}) was confirmed after the cohort filled. Resolve manually: extra seat, or move to the next cohort.`,
       });
     } else {
@@ -53,7 +53,7 @@ export async function POST(request: Request) {
           attendeeEmail: booking.attendeeEmail,
           attendeePhone: booking.attendeePhone,
           cohortLabel: cohort.label,
-          amount: "Pending — invoice to follow",
+          amount: "Pending, invoice to follow",
         }),
         runInlineOrEnqueue("gmail_send", {
           to: booking.attendeeEmail,

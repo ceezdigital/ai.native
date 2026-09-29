@@ -43,6 +43,12 @@ export const env = {
   get googleImpersonateEmail() {
     return required("GOOGLE_IMPERSONATE_EMAIL");
   },
+  // The display name recipients see next to the sender address — without
+  // this, Gmail falls back to the impersonated account's own profile name
+  // ("Ceez"), which isn't how we want the brand to show up in an inbox.
+  get googleSenderName() {
+    return process.env.GOOGLE_SENDER_NAME || "Ai-Nativ";
+  },
   get communityWhatsappInviteUrl() {
     return required("COMMUNITY_WHATSAPP_INVITE_URL");
   },

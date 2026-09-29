@@ -1,4 +1,4 @@
-export type SheetsSyncPayload = {
+export type BookingSheetsSyncPayload = {
   kind: "booking_confirmed";
   bookingId: string;
   attendeeName: string;
@@ -7,6 +7,18 @@ export type SheetsSyncPayload = {
   cohortLabel: string;
   amount: string;
 };
+
+export type MembershipSheetsSyncPayload = {
+  kind: "membership_confirmed";
+  membershipId: string;
+  memberName: string;
+  memberEmail: string;
+  memberPhone: string;
+  tierLabel: string;
+  amount: string;
+};
+
+export type SheetsSyncPayload = BookingSheetsSyncPayload | MembershipSheetsSyncPayload;
 
 export type GmailSendPayload = {
   to: string;
