@@ -37,14 +37,11 @@ export const env = {
   get cronSecret() {
     return required("CRON_SECRET");
   },
-  get googleOauthClientId() {
-    return required("GOOGLE_OAUTH_CLIENT_ID");
+  get googleServiceAccountJson() {
+    return required("GOOGLE_SERVICE_ACCOUNT_JSON");
   },
-  get googleOauthClientSecret() {
-    return required("GOOGLE_OAUTH_CLIENT_SECRET");
-  },
-  get googleOauthRefreshToken() {
-    return required("GOOGLE_OAUTH_REFRESH_TOKEN");
+  get googleImpersonateEmail() {
+    return required("GOOGLE_IMPERSONATE_EMAIL");
   },
   get communityWhatsappInviteUrl() {
     return required("COMMUNITY_WHATSAPP_INVITE_URL");
