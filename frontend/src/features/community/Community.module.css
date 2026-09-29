@@ -80,3 +80,4 @@
   color: var(--glow-cyan);
   font-family: var(--font-display);
 }
+.tierCta { margin-top: 1.5rem; width: 100%; }

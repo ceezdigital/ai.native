@@ -1,4 +1,4 @@
-import { GlassCard, SectionHeading, ValueStack } from "@/features/shared";
+import { Button, GlassCard, SectionHeading, ValueStack } from "@/features/shared";
 import type { ValueStackItem } from "@/features/shared";
 import { COMMUNITY_HEADING, COMMUNITY_ITEMS, COMMUNITY_LEDE, COMMUNITY_TIERS } from "./content";
 import styles from "./Community.module.css";
@@ -52,6 +52,9 @@ export function Community() {
               <span className={styles.tierCurrency}> Ksh</span>
             </div>
             <span className={styles.tierSave}>{tier.note}</span>
+            <Button href="https://tally.so/r/Ek7BN4" variant="primary" className={styles.tierCta}>
+              Select Plan
+            </Button>
           </GlassCard>
         ))}
       </div>

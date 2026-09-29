@@ -8,7 +8,9 @@ A one-page Next.js marketing site for Ai-Nativ, an AI education brand in Nairobi
 
 ## Architecture layers
 
-There is no Controller/Service/Model split here — this is a static-content marketing site, not a data-driven app. The layers that exist:
+The marketing site is static-content, no Controller/Service/Model split needed. The backend (Phase 1 onward, under `src/app/api/` and `src/features/{webhooks,bookings,payments,jobs,google-workspace}/`) does follow a real layering: each feature has a `repository.ts` (DB access), a `service.ts` (orchestration/business logic), and route handlers that stay thin — parse the request, call the service, return a response, nothing more. See `/SYSTEM_DESIGN.md` for the domain model this backs.
+
+The frontend layers that exist:
 
 - **`src/app/`** — Next.js App Router entry points only: `layout.tsx` (fonts, metadata, global chrome), `page.tsx` (section composition, in the exact order from the site structure spec), `globals.css` (design tokens and resets only).
 - **`src/features/<name>/`** — one folder per site section or shared concern. Every feature folder is self-contained: `Component.tsx`, `Component.module.css`, `content.ts` (copy, typed), `index.ts` (public exports only). Nothing outside a feature imports from inside it except through `index.ts`.
@@ -28,7 +30,10 @@ There is no Controller/Service/Model split here — this is a static-content mar
 
 ## Storage / config rules
 
-- No database, no environment variables, and no secrets exist in this repo today. If a future change needs one (e.g. a payment webhook secret), add it via `.env.local` (gitignored) and document it in `frontend/README.md`'s env var table — never commit it.
+- The backend (Phase 1: Clone Camp booking) has a real Postgres database via Prisma — see `/SYSTEM_DESIGN.md` for the architecture and `prisma/schema.prisma` for the models. Never hand-write SQL migrations; use `npm run db:migrate` and let Prisma generate them.
+- Environment variables are real now — see `frontend/.env.example` for the full list and `frontend/README.md`'s table for what each one does. Add new ones the same way: document in both places, add a lazy getter in `src/lib/env.ts`, never commit an actual value.
+- Every webhook handler verifies before it trusts — Tally via HMAC signature, Pesapal via a callback to Pesapal's own status API. Don't add a webhook route that skips this.
+- Google Workspace calls (Sheets/Gmail/Calendar) run inline right after a payment confirms, not via cron — cron (`/api/cron/retry-jobs`) only retries what already failed. Don't move the common path onto cron; see `src/features/jobs/runInlineOrEnqueue.ts` for why.
 - Images live in `public/images/` as real files, referenced by relative path. Never re-introduce base64-embedded images (a previous version of this site did this and bloated the page to 3.9MB).
 
 ## Testing conventions

@@ -1,0 +1,153 @@
+// Ai-Nativ backend — Phase 1 (Clone Camp booking).
+// See /SYSTEM_DESIGN.md at the repo root for the full architecture.
+// CommunityMembership and LabsLead are documented there but not modeled here
+// yet — they're a Phase 2/3 slice, added when that work starts.
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Cohort {
+  id              String   @id @default(uuid())
+  label           String
+  eventDate       DateTime @map("event_date")
+  seatCap         Int      @map("seat_cap")
+  seatsConfirmed  Int      @default(0) @map("seats_confirmed")
+  isActive        Boolean  @default(true) @map("is_active")
+  calendarEventId String?  @map("calendar_event_id")
+  createdAt       DateTime @default(now()) @map("created_at")
+
+  bookings Booking[]
+
+  @@map("cohorts")
+}
+
+enum BookingStatus {
+  pending_payment
+  confirmed
+  overbooked
+  expired
+}
+
+model Booking {
+  id                String        @id @default(uuid())
+  cohortId          String        @map("cohort_id")
+  cohort            Cohort        @relation(fields: [cohortId], references: [id])
+  tallySubmissionId String        @unique @map("tally_submission_id")
+  attendeeName      String        @map("attendee_name")
+  attendeeEmail     String        @map("attendee_email")
+  attendeePhone     String        @map("attendee_phone")
+  status            BookingStatus @default(pending_payment)
+  createdAt         DateTime      @default(now()) @map("created_at")
+  updatedAt         DateTime      @updatedAt @map("updated_at")
+
+  payment Payment?
+
+  @@index([cohortId, status])
+  @@map("bookings")
+}
+
+enum PaymentStatus {
+  pending
+  confirmed
+  failed
+}
+
+model Payment {
+  id                       String               @id @default(uuid())
+  bookingId                String?              @unique @map("booking_id")
+  booking                  Booking?             @relation(fields: [bookingId], references: [id])
+  membershipId             String?              @unique @map("membership_id")
+  membership               CommunityMembership? @relation(fields: [membershipId], references: [id])
+  pesapalOrderTrackingId   String               @unique @map("pesapal_order_tracking_id")
+  pesapalMerchantReference String               @map("pesapal_merchant_reference")
+  amount                   Decimal              @db.Decimal(10, 2)
+  currency                 String               @default("KES")
+  status                   PaymentStatus        @default(pending)
+  rawPayload               Json?                @map("raw_payload")
+  confirmedAt              DateTime?            @map("confirmed_at")
+  createdAt                DateTime             @default(now()) @map("created_at")
+
+  @@map("payments")
+}
+
+enum JobType {
+  sheets_sync
+  gmail_send
+  calendar_update
+}
+
+enum JobStatus {
+  pending
+  processing
+  done
+  failed
+}
+
+model Job {
+  id        String    @id @default(uuid())
+  type      JobType
+  payload   Json
+  status    JobStatus @default(pending)
+  attempts  Int       @default(0)
+  lastError String?   @map("last_error")
+  runAfter  DateTime  @default(now()) @map("run_after")
+  createdAt DateTime  @default(now()) @map("created_at")
+  updatedAt DateTime  @updatedAt @map("updated_at")
+
+  @@index([status, runAfter])
+  @@map("jobs")
+}
+
+enum WebhookSource {
+  tally
+  pesapal
+}
+
+model WebhookEvent {
+  id         String        @id @default(uuid())
+  source     WebhookSource
+  verified   Boolean
+  payload    Json
+  receivedAt DateTime      @default(now()) @map("received_at")
+
+  @@index([source, receivedAt])
+  @@map("webhook_events")
+}
+
+enum CommunityTier {
+  included_trial
+  monthly
+  six_month
+  annual
+}
+
+enum MembershipStatus {
+  pending_payment
+  active
+  lapsed
+  cancelled
+}
+
+model CommunityMembership {
+  id                String           @id @default(uuid())
+  tallySubmissionId String           @unique @map("tally_submission_id")
+  memberName        String           @map("member_name")
+  memberEmail       String           @map("member_email")
+  memberPhone       String           @map("member_phone")
+  tier              CommunityTier
+  status            MembershipStatus @default(pending_payment)
+  startedAt         DateTime?        @map("started_at")
+  renewsAt          DateTime?        @map("renews_at")
+  createdAt         DateTime         @default(now()) @map("created_at")
+  updatedAt         DateTime         @updatedAt @map("updated_at")
+
+  payment Payment?
+
+  @@map("community_memberships")
+}

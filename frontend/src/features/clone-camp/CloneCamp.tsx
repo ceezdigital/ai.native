@@ -60,7 +60,7 @@ export function CloneCamp() {
             <span className={styles.seatDot} aria-hidden="true" />
             {CLONE_CAMP_SEAT_TAG}
           </div>
-          <Button href="#" variant="primary" className={styles.priceCta}>
+          <Button href="https://tally.so/r/Ek7BN4" variant="primary" className={styles.priceCta}>
             {CLONE_CAMP_PRICE.ctaLabel}
           </Button>
           <div className={styles.priceMeta}>
