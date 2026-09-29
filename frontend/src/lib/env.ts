@@ -51,4 +51,7 @@ export const env = {
   get ownerAlertEmail() {
     return required("OWNER_ALERT_EMAIL");
   },
+  get resendApiKey() {
+    return process.env.RESEND_API_KEY || "";
+  },
 };

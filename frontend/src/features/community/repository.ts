@@ -11,6 +11,13 @@ export const COMMUNITY_TIER_PRICING_KES: Record<Exclude<CommunityTier, "included
   annual: 9_000,
 };
 
+export const COMMUNITY_TIER_LABELS: Record<CommunityTier, string> = {
+  included_trial: "Included Trial",
+  monthly: "Monthly",
+  six_month: "6-Month",
+  annual: "Annual",
+};
+
 export function createPendingMembership(
   idempotencyKey: string,
   memberName: string,

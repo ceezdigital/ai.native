@@ -6,16 +6,42 @@ function toBase64Url(input: string): string {
   return Buffer.from(input).toString("base64").replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/, "");
 }
 
-export async function sendGmail(payload: GmailSendPayload) {
-  const gmail = google.gmail({ version: "v1", auth: getGoogleAuthClient() });
+// multipart/alternative with both a plain-text and an HTML part is what
+// real transactional senders do — it's what spam filters expect, and it's
+// what gives a mail client a fallback if it can't render HTML. A single
+// HTML-only part looks more like bulk mail.
+function buildMultipartMessage(payload: GmailSendPayload): string {
+  const boundary = `ainativ_${Date.now()}_${Math.random().toString(36).slice(2)}`;
 
-  const isHtml = Boolean(payload.bodyHtml);
-  const contentType = isHtml ? "text/html; charset=utf-8" : "text/plain; charset=utf-8";
-  const body = isHtml ? payload.bodyHtml : payload.bodyText;
+  return [
+    `To: ${payload.to}`,
+    `Subject: ${payload.subject}`,
+    "MIME-Version: 1.0",
+    `Content-Type: multipart/alternative; boundary="${boundary}"`,
+    "",
+    `--${boundary}`,
+    "Content-Type: text/plain; charset=UTF-8",
+    "",
+    payload.bodyText,
+    "",
+    `--${boundary}`,
+    "Content-Type: text/html; charset=UTF-8",
+    "",
+    payload.bodyHtml,
+    "",
+    `--${boundary}--`,
+  ].join("\r\n");
+}
 
-  const message = [`To: ${payload.to}`, `Subject: ${payload.subject}`, `Content-Type: ${contentType}`, "", body].join(
+function buildPlainMessage(payload: GmailSendPayload): string {
+  return [`To: ${payload.to}`, `Subject: ${payload.subject}`, "Content-Type: text/plain; charset=UTF-8", "", payload.bodyText].join(
     "\r\n",
   );
+}
+
+export async function sendGmail(payload: GmailSendPayload) {
+  const gmail = google.gmail({ version: "v1", auth: getGoogleAuthClient() });
+  const message = payload.bodyHtml ? buildMultipartMessage(payload) : buildPlainMessage(payload);
 
   await gmail.users.messages.send({
     userId: "me",
