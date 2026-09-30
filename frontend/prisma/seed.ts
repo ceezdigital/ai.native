@@ -4,7 +4,9 @@ const db = new PrismaClient();
 
 // Bookings need an active Cohort to attach to — this creates Cohort One if
 // it doesn't already exist. Safe to re-run: it's a no-op after the first
-// time. Adjust the date/cap here, or edit the row directly once real.
+// time. The event date is not decided yet, so this refuses to guess one —
+// pass the real date via COHORT_ONE_EVENT_DATE once it's confirmed:
+//   COHORT_ONE_EVENT_DATE=2026-11-14 npm run db:seed
 async function main() {
   const existing = await db.cohort.findFirst({ where: { isActive: true } });
   if (existing) {
@@ -12,10 +14,22 @@ async function main() {
     return;
   }
 
+  const dateInput = process.env.COHORT_ONE_EVENT_DATE;
+  if (!dateInput) {
+    throw new Error(
+      "COHORT_ONE_EVENT_DATE is not set. Cohort One's real date hasn't been decided yet — " +
+        "run this again with COHORT_ONE_EVENT_DATE=YYYY-MM-DD once it has."
+    );
+  }
+  const eventDate = new Date(dateInput);
+  if (Number.isNaN(eventDate.getTime())) {
+    throw new Error(`COHORT_ONE_EVENT_DATE is not a valid date: "${dateInput}"`);
+  }
+
   const cohort = await db.cohort.create({
     data: {
       label: "Cohort One",
-      eventDate: new Date("2026-10-03"),
+      eventDate,
       seatCap: 50,
     },
   });

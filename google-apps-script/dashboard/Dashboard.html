@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html>
+<head>
+<base target="_top">
+<meta charset="utf-8">
+<style>
+  :root {
+    --bg: #050505;
+    --card: #0f0f0f;
+    --card-2: #141414;
+    --border: #242424;
+    --ink: #eef2fb;
+    --dim: #a7b2cc;
+    --faint: #68738f;
+    --orange: #dd6b35;
+    --gold: #c9a24b;
+    --green: #3fbf60;
+    --blue: #4f9dff;
+    --gray: #8a8f9c;
+  }
+  * { box-sizing: border-box; }
+  html, body {
+    margin: 0; padding: 0; background: var(--bg); color: var(--ink);
+    font-family: -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+    font-size: 13px;
+  }
+  .app { padding: 18px 22px 28px; }
+
+  .header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; }
+  .brand { display: flex; align-items: center; gap: 12px; }
+  .brand-mark {
+    width: 40px; height: 40px; border-radius: 10px;
+    background: linear-gradient(135deg, var(--orange), var(--gold));
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 700; font-size: 15px; color: #0a0500;
+  }
+  .brand-name { font-size: 17px; font-weight: 700; display: flex; align-items: center; gap: 8px; }
+  .badge { font-size: 10px; font-weight: 700; letter-spacing: 0.4px; text-transform: uppercase;
+    background: rgba(221,107,53,0.15); color: var(--orange); padding: 3px 8px; border-radius: 999px; }
+  .subtitle { font-size: 11px; color: var(--faint); margin-top: 2px; }
+  .refresh-btn {
+    background: var(--card-2); border: 1px solid var(--border); color: var(--ink);
+    border-radius: 8px; padding: 8px 14px; font-size: 12px; font-weight: 600; cursor: pointer;
+  }
+  .refresh-btn:hover { border-color: var(--orange); }
+
+  .tabs { display: flex; align-items: center; gap: 10px; margin-bottom: 6px; flex-wrap: wrap; }
+  .tab-btn {
+    background: var(--card); border: 1px solid var(--border); color: var(--dim);
+    border-radius: 10px; padding: 9px 16px; font-size: 12.5px; font-weight: 600; cursor: pointer;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .tab-btn.active { color: var(--ink); border-color: var(--orange); background: rgba(221,107,53,0.08); }
+  .tab-count { background: rgba(255,255,255,0.08); padding: 2px 8px; border-radius: 999px; font-size: 11px; }
+  .tab-btn.active .tab-count { background: var(--orange); color: #0a0500; }
+  .tab-hint { margin-left: auto; font-size: 11px; color: var(--faint); display: flex; align-items: center; gap: 6px; }
+  .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--orange); display: inline-block; }
+
+  .progress-wrap { margin: 10px 0 18px; }
+  .progress-track { height: 6px; background: var(--card-2); border-radius: 999px; overflow: hidden; border: 1px solid var(--border); }
+  .progress-fill { height: 100%; background: linear-gradient(90deg, var(--orange), var(--gold)); }
+  .progress-labels { display: flex; justify-content: space-between; font-size: 11px; color: var(--faint); margin-top: 5px; }
+
+  .kpi-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin: 16px 0 18px; }
+  .kpi-card { background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 16px; }
+  .kpi-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; }
+  .kpi-label { font-size: 10.5px; font-weight: 700; letter-spacing: 0.5px; text-transform: uppercase; color: var(--dim); }
+  .kpi-icon { width: 30px; height: 30px; border-radius: 8px; display: flex; align-items: center; justify-content: center; }
+  .kpi-value { font-size: 26px; font-weight: 700; }
+  .kpi-sub { font-size: 11px; color: var(--faint); margin-top: 4px; }
+
+  .icon-total { background: rgba(238,242,251,0.1); color: var(--ink); }
+  .icon-awaiting { background: rgba(201,162,75,0.15); color: var(--gold); }
+  .icon-paid { background: rgba(63,191,96,0.15); color: var(--green); }
+  .icon-invoiced { background: rgba(79,157,255,0.15); color: var(--blue); }
+
+  .toolbar { display: flex; align-items: center; gap: 10px; margin-bottom: 14px; flex-wrap: wrap; }
+  .search-box {
+    flex: 1; min-width: 220px; background: var(--card); border: 1px solid var(--border);
+    border-radius: 9px; padding: 9px 12px; color: var(--ink); font-size: 12.5px;
+  }
+  .search-box::placeholder { color: var(--faint); }
+  select.filter {
+    background: var(--card); border: 1px solid var(--border); color: var(--ink);
+    border-radius: 9px; padding: 9px 10px; font-size: 12px;
+  }
+  .view-toggle { display: flex; border: 1px solid var(--border); border-radius: 9px; overflow: hidden; }
+  .view-toggle button {
+    background: var(--card); color: var(--dim); border: none; padding: 8px 14px; font-size: 12px; cursor: pointer;
+  }
+  .view-toggle button.active { background: var(--orange); color: #0a0500; font-weight: 700; }
+
+  table { width: 100%; border-collapse: collapse; }
+  thead th {
+    text-align: left; font-size: 10.5px; text-transform: uppercase; letter-spacing: 0.4px;
+    color: var(--faint); padding: 8px 10px; border-bottom: 1px solid var(--border);
+  }
+  tbody td { padding: 10px; border-bottom: 1px solid var(--border); font-size: 12.5px; vertical-align: middle; }
+  tbody tr:hover { background: rgba(255,255,255,0.02); }
+  .name-cell { font-weight: 600; }
+  .email-cell { color: var(--faint); font-size: 11px; margin-top: 2px; }
+  .pill { display: inline-block; padding: 3px 10px; border-radius: 999px; font-size: 11px; border: 1px solid var(--border); color: var(--dim); }
+  select.status-select {
+    border: none; border-radius: 999px; padding: 5px 10px; font-size: 11.5px; font-weight: 700; cursor: pointer;
+  }
+  .status-Awaiting-invoice { background: rgba(201,162,75,0.18); color: var(--gold); }
+  .status-Paid { background: rgba(63,191,96,0.18); color: var(--green); }
+  .status-Invoiced { background: rgba(79,157,255,0.18); color: var(--blue); }
+  .status-Cancelled { background: rgba(255,255,255,0.08); color: var(--gray); }
+
+  .cards-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 12px; }
+  .row-card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 14px; }
+  .row-card .name-cell { font-size: 13px; }
+  .row-card .meta { color: var(--faint); font-size: 11px; margin: 6px 0; }
+
+  .empty-state { text-align: center; padding: 40px 0; color: var(--faint); font-size: 12.5px; }
+  .toast {
+    position: fixed; bottom: 18px; right: 22px; background: var(--card); border: 1px solid var(--orange);
+    color: var(--ink); padding: 8px 14px; border-radius: 8px; font-size: 12px; opacity: 0; transition: opacity 0.2s;
+  }
+  .toast.show { opacity: 1; }
+</style>
+</head>
+<body>
+<div class="app">
+  <div class="header">
+    <div class="brand">
+      <div class="brand-mark">Ai</div>
+      <div>
+        <div class="brand-name">Ai-Nativ <span class="badge">Operations</span></div>
+        <div class="subtitle">Nairobi, Kenya · Manual Payment Admin</div>
+      </div>
+    </div>
+    <button class="refresh-btn" onclick="loadData()">Refresh</button>
+  </div>
+
+  <div class="tabs">
+    <button class="tab-btn" id="tab-bookings" onclick="setTab('bookings')">
+      Clone Camp (Bookings) <span class="tab-count" id="count-bookings">0</span>
+    </button>
+    <button class="tab-btn" id="tab-community" onclick="setTab('community')">
+      Ai-Nativ Community <span class="tab-count" id="count-community">0</span>
+    </button>
+    <div class="tab-hint" id="tab-hint"><span class="dot"></span> In-person founder cloning event · 50-seat hard cap</div>
+  </div>
+
+  <div class="progress-wrap" id="progress-wrap">
+    <div class="progress-track"><div class="progress-fill" id="progress-fill" style="width:0%"></div></div>
+    <div class="progress-labels">
+      <span id="progress-left">0 seats available</span>
+      <span id="progress-right">0% filled</span>
+    </div>
+  </div>
+
+  <div class="kpi-row">
+    <div class="kpi-card">
+      <div class="kpi-top"><span class="kpi-label" id="kpi1-label">Total</span><span class="kpi-icon icon-total">&#128101;</span></div>
+      <div class="kpi-value" id="kpi1-value">0</div>
+      <div class="kpi-sub" id="kpi1-sub">&nbsp;</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-top"><span class="kpi-label">Awaiting Invoice</span><span class="kpi-icon icon-awaiting">&#8987;</span></div>
+      <div class="kpi-value" id="kpi2-value" style="color:var(--gold)">0</div>
+      <div class="kpi-sub">Needs M-Pesa / wire follow-up</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-top"><span class="kpi-label">Paid / Confirmed</span><span class="kpi-icon icon-paid">&#10003;</span></div>
+      <div class="kpi-value" id="kpi3-value" style="color:var(--green)">0</div>
+      <div class="kpi-sub">Payment collected &amp; access granted</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-top"><span class="kpi-label">Invoiced / In pipeline</span><span class="kpi-icon icon-invoiced">&#128179;</span></div>
+      <div class="kpi-value" id="kpi4-value" style="color:var(--blue)">0</div>
+      <div class="kpi-sub">Invoice dispatched, awaiting confirmation</div>
+    </div>
+  </div>
+
+  <div class="toolbar">
+    <input class="search-box" id="search" placeholder="Search name, email, phone, cohort..." oninput="render()">
+    <select class="filter" id="statusFilter" onchange="render()">
+      <option value="">All Statuses</option>
+      <option value="Awaiting invoice">Awaiting invoice</option>
+      <option value="Invoiced">Invoiced</option>
+      <option value="Paid">Paid</option>
+      <option value="Cancelled">Cancelled</option>
+    </select>
+    <select class="filter" id="secondaryFilter" onchange="render()">
+      <option value="">All</option>
+    </select>
+    <div class="view-toggle">
+      <button id="view-table" class="active" onclick="setView('table')">Table</button>
+      <button id="view-cards" onclick="setView('cards')">Cards</button>
+    </div>
+  </div>
+
+  <div id="content"></div>
+</div>
+
+<div class="toast" id="toast">Saved</div>
+
+<script>
+  var state = {
+    data: { bookings: [], community: [], seatCap: 50, statusValues: [] },
+    tab: 'bookings',
+    view: 'table',
+  };
+
+  function loadData() {
+    google.script.run.withSuccessHandler(function (data) {
+      state.data = data;
+      populateSecondaryFilter();
+      render();
+    }).withFailureHandler(function (err) {
+      document.getElementById('content').innerHTML =
+        '<div class="empty-state">Failed to load data: ' + err.message + '</div>';
+    }).getDashboardData();
+  }
+
+  function setTab(tab) {
+    state.tab = tab;
+    document.getElementById('secondaryFilter').value = '';
+    document.getElementById('search').value = '';
+    document.getElementById('statusFilter').value = '';
+    populateSecondaryFilter();
+    render();
+  }
+
+  function setView(view) {
+    state.view = view;
+    document.getElementById('view-table').classList.toggle('active', view === 'table');
+    document.getElementById('view-cards').classList.toggle('active', view === 'cards');
+    render();
+  }
+
+  function populateSecondaryFilter() {
+    var rows = state.data[state.tab] || [];
+    var key = state.tab === 'bookings' ? 'cohort' : 'tier';
+    var values = Array.from(new Set(rows.map(function (r) { return r[key]; }).filter(Boolean)));
+    var sel = document.getElementById('secondaryFilter');
+    sel.innerHTML = '<option value="">All ' + (state.tab === 'bookings' ? 'Cohorts' : 'Tiers') + '</option>' +
+      values.map(function (v) { return '<option value="' + v + '">' + v + '</option>'; }).join('');
+  }
+
+  function statusClass(status) {
+    return 'status-' + String(status || '').replace(/\s+/g, '-');
+  }
+
+  function filteredRows() {
+    var rows = state.data[state.tab] || [];
+    var search = (document.getElementById('search').value || '').toLowerCase();
+    var statusFilter = document.getElementById('statusFilter').value;
+    var secondaryFilter = document.getElementById('secondaryFilter').value;
+    var key = state.tab === 'bookings' ? 'cohort' : 'tier';
+    return rows.filter(function (r) {
+      if (statusFilter && r.status !== statusFilter) return false;
+      if (secondaryFilter && r[key] !== secondaryFilter) return false;
+      if (search) {
+        var hay = [r.name, r.email, r.phone, r[key]].join(' ').toLowerCase();
+        if (hay.indexOf(search) === -1) return false;
+      }
+      return true;
+    });
+  }
+
+  function onStatusChange(sheetName, rowIndex, newStatus, tab) {
+    google.script.run.withSuccessHandler(function () {
+      var rows = state.data[tab];
+      for (var i = 0; i < rows.length; i++) {
+        if (rows[i].rowIndex === rowIndex) { rows[i].status = newStatus; break; }
+      }
+      render();
+      showToast('Saved');
+    }).withFailureHandler(function (err) {
+      showToast('Failed: ' + err.message);
+    }).updateStatus(sheetName, rowIndex, newStatus);
+  }
+
+  function showToast(msg) {
+    var t = document.getElementById('toast');
+    t.textContent = msg;
+    t.classList.add('show');
+    setTimeout(function () { t.classList.remove('show'); }, 1800);
+  }
+
+  function fmtDate(iso) {
+    var d = new Date(iso);
+    if (isNaN(d.getTime())) return iso;
+    return d.toLocaleDateString(undefined, { day: '2-digit', month: 'short', year: 'numeric' }) +
+      ', ' + d.toLocaleTimeString(undefined, { hour: '2-digit', minute: '2-digit' });
+  }
+
+  function statusOptions(current) {
+    return state.data.statusValues.map(function (v) {
+      return '<option value="' + v + '"' + (v === current ? ' selected' : '') + '>' + v + '</option>';
+    }).join('');
+  }
+
+  function render() {
+    var rows = filteredRows();
+    var all = state.data[state.tab] || [];
+    var sheetName = state.tab === 'bookings' ? 'Bookings' : 'Community';
+    var key = state.tab === 'bookings' ? 'cohort' : 'tier';
+
+    document.getElementById('tab-bookings').classList.toggle('active', state.tab === 'bookings');
+    document.getElementById('tab-community').classList.toggle('active', state.tab === 'community');
+    document.getElementById('count-bookings').textContent = (state.data.bookings || []).length;
+    document.getElementById('count-community').textContent = (state.data.community || []).length;
+
+    var isBookings = state.tab === 'bookings';
+    document.getElementById('progress-wrap').style.display = isBookings ? 'block' : 'none';
+    document.getElementById('tab-hint').textContent = isBookings
+      ? '● In-person founder cloning event · 50-seat hard cap'
+      : '● Ongoing WhatsApp membership · Monthly / 6-Month / Annual';
+
+    if (isBookings) {
+      var total = all.length;
+      var cap = state.data.seatCap;
+      var pct = Math.min(100, Math.round((total / cap) * 100));
+      document.getElementById('progress-fill').style.width = pct + '%';
+      document.getElementById('progress-left').textContent = Math.max(0, cap - total) + ' seats available';
+      document.getElementById('progress-right').textContent = pct + '% filled';
+    }
+
+    document.getElementById('kpi1-label').textContent = isBookings ? 'Clone Camp Bookings' : 'Community Signups';
+    document.getElementById('kpi1-value').textContent = all.length + (isBookings ? ' / ' + state.data.seatCap : '');
+    document.getElementById('kpi1-sub').textContent = isBookings ? Math.max(0, state.data.seatCap - all.length) + ' seats left' : 'All tiers combined';
+    document.getElementById('kpi2-value').textContent = all.filter(function (r) { return r.status === 'Awaiting invoice'; }).length;
+    document.getElementById('kpi3-value').textContent = all.filter(function (r) { return r.status === 'Paid'; }).length;
+    document.getElementById('kpi4-value').textContent = all.filter(function (r) { return r.status === 'Invoiced'; }).length;
+
+    var content = document.getElementById('content');
+    if (rows.length === 0) {
+      content.innerHTML = '<div class="empty-state">No matching records.</div>';
+      return;
+    }
+
+    if (state.view === 'table') {
+      var thirdHeader = isBookings ? 'Cohort' : 'Tier';
+      var html = '<table><thead><tr>' +
+        '<th>' + (isBookings ? 'Attendee' : 'Member') + '</th>' +
+        '<th>' + thirdHeader + '</th>' +
+        '<th>Payment Status</th>' +
+        '<th>Amount</th>' +
+        '<th>Contact</th>' +
+        '<th>Registered</th>' +
+        '</tr></thead><tbody>';
+      rows.forEach(function (r) {
+        html += '<tr>' +
+          '<td><div class="name-cell">' + escapeHtml(r.name) + '</div><div class="email-cell">' + escapeHtml(r.email) + '</div></td>' +
+          '<td><span class="pill">' + escapeHtml(r[key] || '') + '</span></td>' +
+          '<td><select class="status-select ' + statusClass(r.status) + '" onchange="onStatusChange(\'' + sheetName + '\',' + r.rowIndex + ',this.value,\'' + state.tab + '\')">' + statusOptions(r.status) + '</select></td>' +
+          '<td>' + escapeHtml(r.amount) + '</td>' +
+          '<td>' + escapeHtml(r.phone) + '</td>' +
+          '<td>' + fmtDate(r.timestamp) + '</td>' +
+          '</tr>';
+      });
+      html += '</tbody></table>';
+      content.innerHTML = html;
+    } else {
+      var cardsHtml = '<div class="cards-grid">';
+      rows.forEach(function (r) {
+        cardsHtml += '<div class="row-card">' +
+          '<div class="name-cell">' + escapeHtml(r.name) + '</div>' +
+          '<div class="meta">' + escapeHtml(r.email) + '</div>' +
+          '<div class="meta">' + escapeHtml(r.phone) + ' · ' + escapeHtml(r[key] || '') + '</div>' +
+          '<div class="meta">' + fmtDate(r.timestamp) + '</div>' +
+          '<select class="status-select ' + statusClass(r.status) + '" onchange="onStatusChange(\'' + sheetName + '\',' + r.rowIndex + ',this.value,\'' + state.tab + '\')">' + statusOptions(r.status) + '</select>' +
+          '</div>';
+      });
+      cardsHtml += '</div>';
+      content.innerHTML = cardsHtml;
+    }
+  }
+
+  function escapeHtml(s) {
+    return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) {
+      return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
+    });
+  }
+
+  loadData();
+</script>
+</body>
+</html>
